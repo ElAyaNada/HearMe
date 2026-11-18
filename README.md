@@ -1,57 +1,76 @@
-# American Sign Language Recognizer
+# SignSpeak
 
-![Demo GIF](/assets/IMG_3358.gif)
-
-
-## Overview
-
-ASL Recognizer is a real-time hand gesture recognition system that utilizes computer vision and machine learning to recognize American Sign Language (ASL) Alphabet. The project leverages OpenCV, MediaPipe, and a trained model to identify hand gestures captured via a webcam.
+SignSpeak is a real-time sign-language letter recognition demo built with
+Streamlit, OpenCV, MediaPipe Hands, and a trained Random Forest model. The
+dashboard shows the camera stream with hand landmarks, a bounding box, and the
+predicted letter overlaid on the frame.
 
 ## Features
 
-- **Real-time Hand Tracking**: Uses MediaPipe's hand tracking model.
-- **Machine Learning Model**: Trained using a Random Forest Classifier.
-- **Gesture Recognition**: Detects ASL letters from hand movements.
-- **Live Prediction Display**: Shows real-time predictions and accumulates recognized letters into a word.
+- In-browser webcam preview with start and stop controls
+- Hand landmark tracking and sign prediction
+- Adds a predicted letter after the sign remains steady for one second
+- Recognized-text controls to clear, delete the last character, or add a space
+- Camera, hand-detection, and current-letter status
+- Recognized text retained in Streamlit session state
 
-## Installation
+## Requirements
 
-### Prerequisites
+- Python 3.10–3.12
+- A webcam
+- The trained model at `assets/model.p`
+- Webcam permission in the browser
 
-Ensure you have Python installed (Python 3.x recommended). Install required dependencies using:
+Install the pinned and compatible dependencies from the project directory:
 
-```bash
-pip install opencv-python mediapipe numpy scikit-learn
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-## Usage
+The requirements pin MediaPipe to 0.10.21 for its `solutions` API, NumPy below
+2 for compatibility with the model and MediaPipe, and PyArrow below 21 for
+Streamlit custom-component support.
 
-### Run ASL Recognition  
-Start real-time gesture recognition using the pretrained model:  
+## Run
 
-```bash
-python app.py
-```
-The program will use the webcam to detect hand gestures and predict ASL letters, displaying them on the screen.
+From the project directory, with the virtual environment activated:
 
-### Train Custom Module (Optional)
-To train a model with your own signs, run:
-```bash
-python getModel.py
+```powershell
+python -m streamlit run app.py
 ```
 
-## Project Structure
+Open the local URL printed by Streamlit (usually `http://localhost:8501`) and
+allow webcam access. Use **Start** and **Stop** in the camera panel to control
+the camera. Hold a sign steady for about one second to add its letter. Use the
+text controls to edit the recognized output.
 
-```bash
-SignLanguage/                # Root directory of the project
-│── assets/                  # Directory for storing project assets
-│   ├── data.pickle          # Preprocessed dataset used for training or inference
-│   ├── model.p              # Pretrained machine learning model file
-│── app.py                   # Main application script, runs the base model by default
-│── getModel.py              # Script for training a custom model using user-specific signs
+Browser camera access generally requires `localhost` or HTTPS. For a remote
+deployment, configure HTTPS and the WebRTC network settings appropriate for
+that environment.
+
+## Project structure
+
+```text
+SignLanguageRecognition/
+├── app.py
+├── requirements.txt
+└── assets/
+    └── model.p
 ```
 
-## License
+## Troubleshooting
 
-This project is open-source and available under the MIT License.
+- **MediaPipe `solutions` error:** Confirm the app is using this project's
+  virtual environment and reinstall its dependencies:
 
+  ```powershell
+  python -m pip install -r requirements.txt
+  ```
+
+- **Webcam does not start:** Allow camera access in the browser, check that
+  another application is not using the camera, and use `localhost` or HTTPS.
+- **Wrong Python environment:** Run Streamlit through the active environment
+  with `python -m streamlit run app.py`.

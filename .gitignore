@@ -3,3 +3,4 @@
 /.idea/
 /data/
 assets/data.pickle
+.venv

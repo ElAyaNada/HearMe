@@ -1,0 +1,9 @@
+streamlit>=1.37,<2
+streamlit-webrtc>=0.47.9,<1
+streamlit-autorefresh>=1.0.1,<2
+av>=12
+opencv-python>=4.8
+mediapipe==0.10.21
+numpy>=1.24,<2
+pyarrow>=14,<21
+scikit-learn==1.4.1.post1
