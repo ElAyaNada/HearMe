@@ -26,8 +26,12 @@ while True:
     data = []
     x_ = []
     y_ = []
+    prediction = ""   # CORRIGÉ : évite un plantage si la main n'a pas 21 points
 
     ret, frame = cap.read()
+    if not ret:       # CORRIGÉ : message clair si la caméra ne répond pas
+        print("Impossible de lire la caméra.")
+        break
     h, w, _ = frame.shape
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -67,10 +71,24 @@ while True:
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 255, 255), 4)
         cv2.putText(frame, prediction, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (255, 255, 255), 3, cv2.LINE_AA)
-        cv2.putText(frame, user_input, (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (255, 255, 255), 3, cv2.LINE_AA)
+
+    # CORRIGÉ : le texte reste affiché même quand aucune main n'est visible
+    cv2.putText(frame, user_input, (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (255, 255, 255), 3, cv2.LINE_AA)
 
     cv2.imshow('Hand Recognition', frame)
-    cv2.waitKey(1)
+
+    # NOUVEAU : gestion du clavier
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):            # quitter
+        break
+    elif key in (8, 127):          # Backspace (127 sur Mac) : supprimer la dernière lettre
+        user_input = user_input[:-1]
+        old_prediction = ""        # évite que la lettre supprimée revienne tout de suite
+        start_time = time.time()
+    elif key == ord('c'):          # vider tout le texte
+        user_input = ""
+        old_prediction = ""
+        start_time = time.time()
 
 cap.release()
 cv2.destroyAllWindows()
