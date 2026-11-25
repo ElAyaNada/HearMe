@@ -75,6 +75,7 @@ class SignProcessor(VideoProcessorBase):
         with self._lock:
             if self._text and not self._text.endswith(" ") and len(self._text) < MAX_LENGTH:
                 self._text += " "
+            self._no_hand_since = None
 
     def delete_last(self):
         with self._lock:
@@ -92,3 +93,4 @@ class SignProcessor(VideoProcessorBase):
             self._text = ""
             self._candidate = ""
             self._since = time.time()
+            self._no_hand_since = None
