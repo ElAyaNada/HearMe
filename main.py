@@ -11,9 +11,10 @@ if "user" not in st.session_state:
 login_page = st.Page("views/login.py", title="Connexion", icon="🔑")
 home_page = st.Page("views/accueil.py", title="Accueil", icon="🏠", default=True)
 voice_page = st.Page("views/voix.py", title="Ma voix", icon="🗣️")
+camera_page = st.Page("views/camera.py", title="Caméra", icon="📷")
 
 if st.session_state.user:
-    pg = st.navigation([home_page, voice_page])
+    pg = st.navigation([home_page, camera_page, voice_page])
     with st.sidebar:
         st.caption(f"Connecté : {st.session_state.user['email']}")
         if st.button("Se déconnecter"):
