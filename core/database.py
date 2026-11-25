@@ -49,6 +49,8 @@ def get_user_by_email(email: str):
 
 
 def update_voice(user_id: int, voice_gender: str):
+    if voice_gender not in ("female", "male"):
+        raise ValueError("Voix invalide.")
     with db() as conn:
         conn.execute(
             "UPDATE users SET voice_gender = ? WHERE id = ?",
